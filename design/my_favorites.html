@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="text-align: center; margin-top: 30px; margin-bottom: 20px;">
+    <h2 style="color: #e74c3c;">❤️ Favorilerim</h2>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; padding-bottom: 50px;">
+    
+    {% for book in books %}
+    <div id="book-{{ book.bookid }}" style="background: white; width: 220px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); overflow: hidden; transition: transform 0.2s;">
+        
+        <a href="{% url 'product_detail' book.bookid %}" style="text-decoration: none; color: inherit; display: block;">
+            <div style="height: 300px; background: #fff; display: flex; align-items: center; justify-content: center; overflow: hidden; border-bottom: 1px solid #f0f0f0;">
+                {% if book.image %}
+                    <img src="{{ book.image.url }}" style="height: 100%; width: 100%; object-fit: contain;" alt="{{ book.bookname }}">
+                {% else %}
+                    <span style="font-size: 50px;">📖</span>
+                {% endif %}
+            </div>
+
+            <div style="padding: 15px 15px 5px 15px;">
+                <h4 style="margin: 0 0 10px 0; color: #2c3e50; font-size: 16px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">
+                    {{ book.bookname }}
+                </h4>
+                <p style="margin: 0 0 10px 0; font-size: 14px; color: #7f8c8d;">{{ book.author }}</p>
+            </div>
+        </a> 
+
+        <div style="padding: 0 15px 15px 15px;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                
+                <h3 style="margin: 0; color: #e67e22; font-size: 18px;">${{ book.price }}</h3>
+                
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    
+                    <a href="{% url 'toggle_favorite' book.bookid %}" style="text-decoration: none; font-size: 22px;" title="Remove from favorites">
+                        <i class="fas fa-heart" style="color: #e74c3c;"></i>
+                    </a>
+
+                    <a href="{% url 'add_to_cart' book.bookid %}" style="text-decoration: none; background: #27ae60; color: white; padding: 8px 12px; border-radius: 5px; cursor: pointer; font-size: 13px; display: inline-block;">
+                        Sepete Ekle
+                    </a>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+    
+    {% empty %}
+        <div style="text-align: center; margin-top: 50px;">
+            <span style="font-size: 60px;">💔</span>
+            <h3>Henüz favori kitabınız bulunmamaktadır.Keşfetmeye başlayın.</h3>
+            <a href="{% url 'index' %}" style="display: inline-block; margin-top: 10px; background: #3498db; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px;">Browse Books</a>
+        </div>
+    {% endfor %}
+
+</div>
+{% endblock %}

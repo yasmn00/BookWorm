@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content-area" style="max-width: 1000px; margin: 30px auto; padding: 20px;">
+    
+    <h2 style="color: #2c3e50; margin-bottom: 20px; border-bottom: 2px solid #3498db; padding-bottom: 10px;">
+        🛍️ Sipariş Geçmişim
+    </h2>
+
+    {% if orders %}
+        <div style="display: flex; flex-direction: column; gap: 20px;">
+            {% for order in orders %}
+            <div style="border: 1px solid #ddd; border-radius: 8px; overflow: hidden; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.05);">
+                
+                <div style="background: #f8f9fa; padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; flex-wrap: wrap; gap: 10px;">
+                    <div>
+                        <span style="font-weight: bold; color: #2c3e50; font-size: 1.1em;">Order #{{ order.order_id }}</span>
+                        <span style="color: #7f8c8d; font-size: 0.9em; margin-left: 10px;">{{ order.date|date:"d M Y H:i" }}</span>
+                        
+                        {% if 'Delivered' not in order.status and order.estimated_delivery %}
+                        <div style="margin-top: 5px; font-size: 0.9em; color: #d35400;">
+                            <i class="fas fa-truck"></i> Tahmini Teslimat: 
+                            <span style="font-weight: bold;">{{ order.estimated_delivery|date:"d F Y" }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        {% if 'Received' in order.status or 'Processing' in order.status %}
+                            <span style="background: #f1c40f; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: bold;">📦 Hazırlanıyor</span>
+                        {% elif 'Shipped' in order.status %}
+                            <span style="background: #3498db; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: bold;">🚚 Kargoda</span>
+                        {% elif 'Delivered' in order.status %}
+                            <span style="background: #27ae60; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: bold;">✅ Teslim Edildi</span>
+                        {% elif 'Cancelled' in order.status %}
+                            <span style="background: #e74c3c; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: bold;">❌ İptal</span>
+                        {% else %}
+                            <span style="background: #95a5a6; color: white; padding: 5px 10px; border-radius: 15px; font-size: 12px; font-weight: bold;">⏳ {{ order.status }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div style="padding: 15px;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                          {% for item in order.items %}
+                          <tr style="border-bottom: 1px solid #f1f1f1;">
+        
+                              <td style="padding: 10px; color: #2c3e50;">
+                                  <a href="{% url 'product_detail' item.book_id %}" style="text-decoration: none; color: inherit;">
+                                      📚 {{ item.book_name }}
+                                  </a>
+            
+                                   {% if 'Delivered' in order.status %}
+                
+                                    <div style="margin-top: 10px; background: #fff8e1; padding: 10px; border-radius: 5px; border: 1px dashed #f39c12;">
+                                        <form action="{% url 'add_review' %}" method="POST">
+                                            {% csrf_token %}
+                                            <input type="hidden" name="book_id" value="{{ item.book_id }}">
+                                            <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                                            <input type="hidden" name="next_url" value="my_orders">
+                                            
+                                            <div style="display: flex; gap: 5px; align-items: center;">
+                                                <select name="rating" style="padding: 5px; border: 1px solid #ddd; border-radius: 4px;">
+                                                    <option value="5">⭐⭐⭐⭐⭐</option>
+                                                    <option value="4">⭐⭐⭐⭐</option>
+                                                    <option value="3">⭐⭐⭐</option>
+                                                    <option value="2">⭐⭐</option>
+                                                    <option value="1">⭐</option>
+                                                </select>
+                                            
+                                                <input type="text" name="comment_text" placeholder="Write a review..." required style="padding: 5px; flex: 1; border: 1px solid #ddd; border-radius: 4px;">
+                                            
+                                                <button type="submit" style="background: #27ae60; color: white; border: none; padding: 5px 10px; cursor: pointer; border-radius: 4px;">
+                                                    Gönder
+                                                </button>
+                                            </div>
+                                        </form>
+                                    </div>
+
+                                   {% endif %}
+                                </td>
+
+                                <td style="text-align: center; color: #555;">x{{ item.quantity }}</td>
+                                <td style="text-align: right; font-weight: bold; color: #2c3e50;">${{ item.price }}</td>
+                             </tr>
+                          {% endfor %}
+                    </table>
+                    
+                    <div style="text-align: right; margin-top: 15px; font-size: 1.1em; color: #27ae60; font-weight: bold;">
+                        Toplam Tutar: ${{ order.grand_total }}
+                    </div>
+                </div>
+
+            </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div style="text-align: center; padding: 50px; background: #fff; border-radius: 8px; border: 1px solid #eee;">
+            <p style="font-size: 18px; color: #7f8c8d;">You have no orders yet.</p>
+            <a href="{% url 'index' %}" style="display: inline-block; margin-top: 10px; color: #3498db; text-decoration: none; font-weight: bold;">Start Shopping Now &rarr;</a>
+        </div>
+    {% endif %}
+
+</div>
+{% endblock %}

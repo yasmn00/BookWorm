@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 style="text-align: center; color: #2c3e50; margin-bottom: 30px;">🛒 My Shopping Cart</h1>
+
+{% if cart_items %}
+    <div style="background: white; padding: 20px; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.05);">
+        
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead>
+                <tr style="background: #f8f9fa; color: #7f8c8d; text-align: left;">
+                    <th style="padding: 15px;">Product</th>
+                    <th style="padding: 15px;">Price</th>
+                    <th style="padding: 15px;">Quantity</th>
+                    <th style="padding: 15px;">Total</th>
+                    <th style="padding: 15px;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr style="border-bottom: 1px solid #eee;">
+                    
+                    <td style="padding: 15px; display: flex; align-items: center; gap: 15px;">
+                        {% if item.book.image %}
+                            <img src="{{ item.book.image.url }}" width="50" style="border-radius: 5px;">
+                        {% elif item.book.imageurl %}
+                            <img src="{{ item.book.imageurl }}" width="50" style="border-radius: 5px;">
+                        {% else %}
+                            <span>📖</span>
+                        {% endif %}
+                        <span style="font-weight: bold; color: #2c3e50;">{{ item.book.bookname }}</span>
+                    </td>
+                    
+                    <td style="padding: 15px;">${{ item.book.price }}</td>
+                    
+                    <td style="padding: 15px; text-align: center;">
+                        <div style="display: flex; align-items: center; justify-content: center; gap: 10px;">
+                            <a href="{% url 'update_cart_item' item.book.bookid 'decrease' %}" 
+                            style="background: #e74c3c; color: white; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-weight: bold; font-size: 18px;">-</a>
+
+                             <span style="font-size: 16px; font-weight: bold; width: 30px; text-align: center;">
+                             {{ item.quantity }}
+                             </span>
+
+                            <a href="{% url 'update_cart_item' item.book.bookid 'increase' %}" 
+                                style="background: #27ae60; color: white; width: 25px; height: 25px; border-radius: 50%; display: flex; align-items: center; justify-content: center; text-decoration: none; font-weight: bold; font-size: 18px;">+</a>
+                        </div>
+                     </td>
+                    
+                    <td style="padding: 15px; color: #e67e22; font-weight: bold;">
+                        ${{ item.total_price }}
+                    </td>
+
+                    <td style="padding: 15px;">
+                         <a href="{% url 'remove_from_cart' item.book.bookid %}" 
+                          onclick="return confirm('Are you sure you want to remove this item?');"
+                          style="text-decoration: none; background: #e74c3c; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer; display: inline-block;">Remove
+                         </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <div style="text-align: right; margin-top: 30px; font-size: 20px;">
+            <span>Genel Toplam:</span>
+            <span style="font-size: 28px; color: #27ae60; font-weight: bold; margin-left: 10px;">
+                ${{ grand_total }}
+            </span>
+        </div>
+
+        <div style="text-align: right; margin-top: 20px;">
+           <a href="{% url 'checkout_view' %}" style="background: #27ae60; color: white; text-decoration: none; padding: 15px 30px; border-radius: 8px; font-size: 18px; display: inline-block;">
+             Siparişi tamamla </a>
+        </div>
+
+    </div>
+
+{% else %}
+    <div style="text-align: center; padding: 50px;">
+        <span style="font-size: 80px;">🛒</span>
+        <h2 style="color: #7f8c8d;">sepetin bos.</h2>
+        <a href="{% url 'index' %}" style="display: inline-block; margin-top: 20px; text-decoration: none; background: #e67e22; color: white; padding: 10px 20px; border-radius: 5px;">
+            Alişverişe başla
+        </a>
+    </div>
+{% endif %}
+
+{% endblock %}

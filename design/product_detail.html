@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div style="background: white; padding: 30px; border-radius: 15px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); display: flex; gap: 40px; margin-bottom: 50px; flex-wrap: wrap;">
+    
+    <div style="flex: 1; min-width: 300px; display: flex; justify-content: center; align-items: center; background: #f9f9f9; border-radius: 10px;">
+        {% if book.image %}
+            <img src="{{ book.image.url }}" style="max-height: 400px; max-width: 100%; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+        {% elif book.imageurl %}
+            <img src="{{ book.imageurl }}" style="max-height: 400px; max-width: 100%; box-shadow: 0 10px 20px rgba(0,0,0,0.2);">
+        {% else %}
+            <span style="font-size: 100px;">📖</span>
+        {% endif %}
+    </div>
+
+    <div style="flex: 1; min-width: 300px;">
+        <h1 style="color: #2c3e50; font-size: 32px; margin-bottom: 10px;">{{ book.bookname }}</h1>
+        
+        <h3 style="color: #7f8c8d; font-weight: normal; margin-bottom: 20px;">Yazar: {{ book.author }}</h3>
+        
+        <div style="margin-bottom: 15px; display: flex; align-items: center; gap: 5px;">
+             <span style="color: #f1c40f; font-size: 20px;">⭐⭐⭐⭐⭐</span>
+             <span style="color: #95a5a6; font-size: 14px; margin-top: 4px;">(Henüz değerlendirilmemiş)</span>
+        </div>
+
+        <div style="font-size: 28px; color: #e67e22; font-weight: bold; margin-bottom: 20px;">
+            ${{ book.price }}
+        </div>
+
+        <div style="margin-bottom: 20px; font-size: 14px;">
+            {% if book.stock > 0 %}
+                <span style="background: #d4edda; color: #155724; padding: 5px 10px; border-radius: 20px;">
+                    ✅ Stokta ({{ book.stock }} adet var)
+                </span>
+            {% else %}
+                <span style="background: #f8d7da; color: #721c24; padding: 5px 10px; border-radius: 20px;">
+                    ❌ Tükendi
+                </span>
+            {% endif %}
+        </div>
+
+        <div style="display: flex; gap: 15px;">
+            
+            <a href="{% url 'add_to_cart' book.bookid %}" class="btn-primary" style="flex: 2; background: #27ae60; color: white; text-align: center; padding: 15px; border-radius: 8px; font-size: 18px; text-decoration: none; font-weight: bold;">
+                Sepete Ekle
+            </a>
+
+            <a href="{% url 'toggle_favorite' book.bookid %}" style="flex: 1; background: #ecf0f1; color: #2c3e50; text-decoration: none; display: flex; align-items: center; justify-content: center; border-radius: 8px; font-size: 18px; cursor: pointer; transition: background 0.3s;">
+                {% if is_favorite %}
+                    <i class="fas fa-heart" style="color: #e74c3c; margin-right: 8px;"></i> Favorilerde
+                {% else %}
+                    <i class="far fa-heart" style="color: #7f8c8d; margin-right: 8px;"></i> Favorilere Ekle
+                {% endif %}
+            </a>
+
+        </div>
+    </div>
+</div>
+
+<div style="margin-bottom: 50px;">
+    <h3 style="border-bottom: 2px solid #ecf0f1; padding-bottom: 10px; color: #2c3e50;">💬 Okuyucu Yorumları</h3>
+    
+    <div style="background: white; padding: 25px; border-radius: 10px; margin-top: 15px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+        <div class="review-list">
+            {% for review in reviews %}
+                <div style="padding: 15px 0; border-bottom: 1px solid #f9f9f9;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px;">
+                        
+                        <strong style="color: #2c3e50; font-size: 16px;">{{ review.user_name }}</strong>
+                        
+                        <span style="color: #f39c12; letter-spacing: 2px;">
+                            {% if review.star == 5 %}⭐⭐⭐⭐⭐
+                            {% elif review.star == 4 %}⭐⭐⭐⭐
+                            {% elif review.star == 3 %}⭐⭐⭐
+                            {% elif review.star == 2 %}⭐⭐
+                            {% else %}⭐
+                            {% endif %}
+                        </span>
+                    </div>
+                    <p style="margin: 0; color: #555; line-height: 1.5;">{{ review.comment }}</p>
+                </div>
+            {% empty %}
+                <div style="text-align: center; padding: 30px; color: #95a5a6;">
+                    <i class="far fa-comment-dots" style="font-size: 40px; margin-bottom: 10px; display: block;"></i>
+                    <p>Henüz yorum yapılmamış.</p>
+                    <small>Bu ürünü satın aldıysanız <b>Siparişlerim</b>sayfasından değerlendirebilirsiniz </small>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<div style="margin-bottom: 50px;">
+    <h3 style="border-bottom: 2px solid #e67e22; padding-bottom: 10px; color: #2c3e50; display: inline-block;">
+        ✨ Bunlarıda sevebilirsiniz
+    </h3>
+    
+    <div style="display: flex; gap: 20px; overflow-x: auto; padding: 20px 0;">
+        {% for rec_book in recommended_books %}
+        <a href="{% url 'product_detail' rec_book.bookid %}" style="text-decoration: none; color: inherit;">
+            <div style="background: white; width: 180px; padding: 10px; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); text-align: center;">
+                <div style="height: 200px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px;">
+                      {% if rec_book.image %}
+                         <img src="{{ rec_book.image.url }}" style="max-height: 100%; max-width: 100%;">
+                     {% elif rec_book.imageurl %}
+                         <img src="{{ rec_book.imageurl }}" style="max-height: 100%; max-width: 100%;">
+                     {% else %}
+                         <span>📖</span>
+                     {% endif %}
+                </div>
+                <h5 style="margin: 0; font-size: 14px; color: #2c3e50;">{{ rec_book.bookname }}</h5>
+                <p style="color: #e67e22; font-weight: bold;">${{ rec_book.price }}</p>
+            </div>
+        </a>
+        {% empty %}
+            <p>Bu kategoride başka öneri yok.</p>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

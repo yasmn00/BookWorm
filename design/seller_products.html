@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="content-area" style="max-width: 1200px; margin: 30px auto; padding: 20px;">
+    
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <div>
+            <h2 style="color: #2c3e50; margin: 0;">📚 Satıştaki Kitaplar</h2>
+        </div>
+        <a href="{% url 'seller_add_book' %}" style="background: #27ae60; color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; font-weight: bold;">
+            + Yeni kitap ekle
+        </a>
+    </div>
+
+    <table style="width: 100%; border-collapse: collapse; background: white; box-shadow: 0 2px 5px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden;">
+        <thead>
+            <tr style="background: #34495e; color: white; text-align: left;">
+                <th style="padding: 12px;">ID</th>
+                <th style="padding: 12px;">Kitap</th> <th style="padding: 12px;">Kitap İsmi</th>
+                <th style="padding: 12px;">Yazar</th>
+                <th style="padding: 12px;">Fiyat</th>
+                <th style="padding: 12px; min-width: 200px;">Stok işlemleri</th> 
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for product in products %}
+            <tr style="border-bottom: 1px solid #ddd;">
+                
+                <td style="padding: 12px; color: #7f8c8d;">#{{ product.id }}</td>
+                
+                <td style="padding: 12px;">
+                    {% if product.image %}
+                        <img src="{{ product.image.url }}" width="40" style="border-radius: 4px;">
+                    {% else %}
+                        <span>📖</span>
+                    {% endif %}
+                </td>
+
+                <td style="padding: 12px;">
+                    <strong style="color: #2c3e50;">{{ product.name }}</strong>
+                </td>
+                
+                <td style="padding: 12px; color: #555;">{{ product.author }}</td>
+                
+                <td style="padding: 12px; color: #e67e22; font-weight: bold;">${{ product.price }}</td>
+                
+                <td style="padding: 12px;">
+                    <form method="POST" style="display: flex; gap: 8px; align-items: center;">
+                        {% csrf_token %}
+                        <input type="hidden" name="book_id" value="{{ product.id }}">
+                        
+                        <input type="number" name="new_stock" value="{{ product.stock }}" min="0" required 
+                               style="width: 60px; padding: 8px; border: 1px solid #bdc3c7; border-radius: 4px; text-align: center; font-weight: bold;">
+                        
+                        <button type="submit" 
+                                style="background: #2980b9; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; font-size: 13px; font-weight: bold; transition: background 0.3s;">
+                            Güncelle
+                        </button>
+                    </form>
+
+                    <div style="margin-top: 5px; font-size: 0.85em;">
+                        {% if product.stock < 5 %}
+                            <span style="color: #e74c3c; font-weight: bold;">⚠️ Stok azaldı!</span>
+                        {% else %}
+                            <span style="color: #27ae60;">✔ Stok iyi durumda</span>
+                        {% endif %}
+                    </div>
+                </td>
+
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" style="padding: 30px; text-align: center; color: #7f8c8d;">
+                    Henüz hiç kitap eklenmemiş.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    
+    <div style="margin-top: 20px;">
+        <a href="{% url 'seller_dashboard' %}" style="color: #777; text-decoration: none;">&larr; Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

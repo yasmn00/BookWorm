@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="form-box" style="max-width: 600px; margin: 50px auto;">
+    <h2>📚 Yeni Kitap Ekle</h2>
+    <p style="color: #777; margin-bottom: 20px;">Add a new product to your store.</p>
+
+    <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label>Kitap İsmi</label>
+            <input type="text" name="book_name" required placeholder="e.g. The Great Gatsby" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+        </div>
+
+        <div class="form-group">
+            <label>Yazar</label>
+            <input type="text" name="author" required placeholder="e.g. F. Scott Fitzgerald" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+        </div>
+
+        <div style="display: flex; gap: 10px;">
+            <div class="form-group" style="flex: 1;">
+                <label>Fiyat</label>
+                <input type="number" step="0.01" name="price" required placeholder="0.00" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            </div>
+            
+            <div class="form-group" style="flex: 1;">
+                <label>Stok adedi</label>
+                <input type="number" name="stock" required placeholder="0" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Kategori</label>
+            <select name="category" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; background: white;">
+                {% for cat in categories %}
+                    <option value="{{ cat.categoryid }}">{{ cat.categoryname }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label>Kitap Kapağı (Resim)</label>
+            <input type="file" name="image" accept="image/*" style="padding: 10px;">
+        </div>
+
+        <button type="submit" class="btn-primary" style="background: #27ae60; margin-top: 10px;">Kaydet ve Yayınla</button>
+    </form>
+    
+    <div class="form-footer">
+        <a href="{% url 'seller_dashboard' %}">İptal Et ve Dön</a>
+    </div>
+</div>
+{% endblock %}

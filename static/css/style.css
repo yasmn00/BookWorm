@@ -1,0 +1,309 @@
+/* =========================================
+   1. GENERAL SETTINGS (RESET & BODY)
+   ========================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+a { 
+    text-decoration: none; 
+    color: inherit; 
+    transition: color 0.3s; 
+}
+
+ul { list-style: none; }
+
+
+/* =========================================
+   2. HEADER AREA
+   ========================================= */
+.header-area {
+    background-color: #fff;
+    padding: 15px 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #ddd;
+}
+
+/* --- LOGO SETTINGS --- */
+.logo a {
+    display: flex;
+    align-items: center;
+    gap: 12px; 
+}
+
+.site-logo {
+    height: 50px; 
+    width: auto;
+    display: block;
+}
+
+.logo span {
+    font-size: 28px;
+    font-weight: 800;
+    color: #2c3e50; 
+    letter-spacing: -1px;
+}
+
+.logo a:hover span {
+    color: #ff6600; 
+}
+
+/* --- SEARCH BOX --- */
+.search-box {
+    display: flex;
+    width: 40%;
+}
+
+.search-box input {
+    width: 100%;
+    padding: 10px 15px;
+    border: 2px solid #ddd;
+    border-right: none;
+    border-radius: 50px 0 0 50px;
+    outline: none;
+}
+
+.search-box input:focus { border-color: #ff6600; }
+
+.search-box button {
+    padding: 10px 25px;
+    background-color: #ff6600;
+    color: white;
+    border: 2px solid #ff6600;
+    border-radius: 0 50px 50px 0;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.search-box button:hover { background-color: #e65c00; }
+
+/* --- USER LINKS --- */
+.user-menu a {
+    margin-left: 15px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+}
+.user-menu a:hover { color: #ff6600; }
+
+
+/* =========================================
+   3. NAVIGATION BAR (MAIN MENU)
+   ========================================= */
+
+.main-nav {
+    background-color: #2c3e50;
+    color: white;
+    padding: 0 50px;
+    height: 50px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    
+    position: sticky; 
+    top: 0; 
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.categories { display: flex; height: 100%; }
+.categories li { height: 100%; }
+
+.categories a {
+    color: #ecf0f1;
+    font-weight: 500;
+    padding: 0 20px;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    border-bottom: 3px solid transparent;
+}
+
+.categories a:hover {
+    background-color: #34495e;
+    border-bottom: 3px solid #ff6600;
+}
+
+
+/* =========================================
+   4. CART BUTTON (CUSTOM DESIGN)
+   ========================================= */
+.cart-box {
+    display: flex;
+    align-items: center;
+}
+
+.cart-box a {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    
+    background-color: #ff6600;
+    color: white !important;
+    
+    padding: 8px 25px;  
+    border-radius: 50px;  
+    
+    font-weight: bold;
+    font-size: 14px;
+    white-space: nowrap;  
+    
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    transition: all 0.3s ease;
+}
+
+.cart-box a:hover {
+    background-color: #e65c00;
+    transform: translateY(-2px);
+}
+
+
+/* =========================================
+   5. CONTENT AREA & FOOTER
+   ========================================= */
+   .content-area {
+    max-width: 1200px;
+    margin: 30px auto;
+    padding: 0 20px;
+    width: 100%;
+    flex: 1;
+}
+
+footer {
+    background-color: #222;
+    color: #aaa;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+    font-size: 14px;
+}
+
+
+/* =========================================
+   6. RESPONSIVE DESIGN (MOBILE)
+   ========================================= */
+@media (max-width: 768px) {
+    .header-area {
+        flex-direction: column;
+        padding: 20px;
+        gap: 15px;
+    }
+
+    .search-box { width: 100%; }
+    
+    .main-nav {
+        height: auto;
+        padding: 10px;
+        flex-direction: column;
+        position: sticky;
+    }
+
+    .categories {
+        flex-direction: column;
+        width: 100%;
+        text-align: center;
+        margin-bottom: 10px;
+    }
+
+    .categories a {
+        padding: 10px;
+        border-bottom: 1px solid #34495e;
+    }
+
+    .cart-box { width: 100%; justify-content: center; }
+    .cart-box a { width: 100%; }
+}
+
+/* =========================================
+   7. AUTH PAGES (LOGIN & REGISTER)
+   ========================================= */
+
+/* Center White Box */
+.form-box {
+    width: 100%;
+    max-width: 450px;   
+    margin: 50px auto; 
+    background-color: #fff;
+    padding: 40px;
+    border-radius: 10px; 
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    text-align: center;
+}
+
+.form-box h2 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Inputs inside Form */
+.form-group {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: 600;
+    color: #555;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.form-group input:focus {
+    border-color: #ff6600;
+}
+
+/* Login/Submit Button */
+.btn-primary {
+    width: 100%;
+    padding: 12px;
+    background-color: #2c3e50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: 10px;
+}
+
+.btn-primary:hover {
+    background-color: #ff6600; 
+}
+
+/* Footer Links  */
+
+.form-footer {
+    margin-top: 20px;
+    font-size: 14px;
+    color: #777;
+}
+.form-footer a {
+    color: #ff6600;
+    font-weight: bold;
+}
